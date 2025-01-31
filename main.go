@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 
@@ -197,5 +198,17 @@ func main() {
 
 	if err := r.Run(":8080"); err != nil {
 		fmt.Println(err)
+	}
+
+	db, err := sql.Open("sqlite", "./data.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	// Example: Insert a new record
+	_, err = db.Exec("INSERT INTO locations (PostalCode, KelurahanCode) VALUES (?, ?)", "12345", "KEL001")
+	if err != nil {
+		log.Fatal(err)
 	}
 }
